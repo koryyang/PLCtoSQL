@@ -41,7 +41,7 @@ namespace HslCommunicationDemo
         private void FormSiemens_Load(object sender, EventArgs e)
         {
             panel2.Enabled = true;
-            //   userCurve1.SetLeftCurve("A", new float[0], Color.Tomato);
+        
 
         }
 
@@ -431,10 +431,10 @@ namespace HslCommunicationDemo
         #region 数据采集
 
         private Thread thread1, thread2, thread3, thread4, thread5, thread6 ,thread7 ,thread8 = null;
-        private bool isThreadRun = false;          // 用来标记线程的运行状态，初始未点击启动按钮时不开启
-        private int timeSleep1 = 200;               // 默认读取的间隔ms
+        private bool isThreadRun = false;          // 用来标记线程的运行状态，初始未点击启动按钮时不开启  
         System.Timers.Timer timer = null;
         private int day = 0;
+       
   
         //时延函数，启动线程
         void timer_Elapsed(object sender,System.Timers.ElapsedEventArgs e)
@@ -472,52 +472,12 @@ namespace HslCommunicationDemo
 
         }
 
-
-        private void button27_Click(object sender, EventArgs e)     //开启/关闭与1500通讯线程
-        {
-            if (!isThreadRun)
-            {
-
-            //    button27.Text = "通讯停止";
-            //    isThreadRun = true;     //线程状态
-            //    thread1 = new Thread(ThreadReadServer1);
-            //    thread2 = new Thread(ThreadReadServer2);
-            //    thread3 = new Thread(ThreadReadServer3);
-            //    thread4 = new Thread(ThreadReadServer4);
-            //    thread5 = new Thread(ThreadReadServer5);
-            //    thread6 = new Thread(ThreadReadServer6);
-            //    thread1.IsBackground = true;
-            //    thread2.IsBackground = true;
-            //    thread3.IsBackground = true;
-            //    thread4.IsBackground = true;
-            //    thread5.IsBackground = true;
-            //    thread6.IsBackground = true;
-            //    //thread1.Start();
-            //    //thread2.Start();
-            //    thread3.Start();
-            //    thread3.Suspend();
-            //    //thread4.Start();
-            //    //thread5.Start();
-            //    //thread6.Start();
-            //}
-            //else
-            //{
-            //    button27.Text = "通讯启动";
-            //    isThreadRun = false;
-            }
-        }
-      
+    
         //铁水转运线程
         private void ThreadReadServer1()
         {
-            int result;
+            int result = 0;
             IronMeltTrans ironMeltTrans = new IronMeltTrans();
-            int MaterialIDSearchSignal = 0, ProblemSearchSignal = 0;
-            int ProblemCateSID, MaterialSID, IronMeltSuppMaterialWeight;
-            string ProductionProblemRemark, ProductionProblemBeginTime, ProductionProblemEndTime, ProblemCateDesc, MaterialID;
-            DateTime IronMeltTransTime, IronMeltSuppMaterialTime;
-            List<Material> materials = null;
-            List<ProblemCate> problemCates = null;
 
             try
             {
@@ -525,96 +485,15 @@ namespace HslCommunicationDemo
                 int groupinfo = siemensTcpNet.ReadInt16("DB1.540").Content;   //班次
                 if (groupinfo == 2) { ironMeltTrans.GroupSID = 6; }
                 if (groupinfo == 3) { ironMeltTrans.GroupSID = 5; }
-
+                ironMeltTrans.ProductionScheduleSID = ProductionScheduleDAL.GetProductionScheduleSID(); //订单
                 ironMeltTrans.EmployeeSID = siemensTcpNet.ReadInt16("DB1.540").Content;   //员工（测试）
-
                 ironMeltTrans.EquipmentSID = siemensTcpNet.ReadInt16("DB1.4").Content;//炉号
                 ironMeltTrans.ElectricFurnaceCount = siemensTcpNet.ReadInt16("DB1.6").Content;//炉次
                 ironMeltTrans.IronMeltTransNum = siemensTcpNet.ReadInt16("DB1.8").Content;//包次
-                ironMeltTrans.IronMeltTransWeight = siemensTcpNet.ReadInt16("DB1.0").Content;//铁水重量   
-
-                bool HangCheSignal = siemensTcpNet.ReadBool("DB1.552").Content;      //行车吊装写入标志
-                if (HangCheSignal == true)
-                {
-                    ironMeltTrans.BackWeight = siemensTcpNet.ReadInt16("DB1.550").Content;    //回炉铁水重量
-                }
-
-                IronMeltTransTime = DateTime.Now;//铁水转运时间
-
-                //物料查询         
-                if (siemensTcpNet.ReadInt16("DB1.830").Content - MaterialIDSearchSignal != 0)
-                {
-                    try
-                    {
-                        materials = MaterialDAL.LoadMaterals("YYJ");                   //查询料号                     
-
-                        writeResultRender(siemensTcpNet.Write("DB1.312", materials[0].MaterialID + "/" + materials[0].MaterialSID), "DB1.312");   //物料信息写入HMI
-                        writeResultRender(siemensTcpNet.Write("DB1.334", materials[1].MaterialID + "/" + materials[1].MaterialSID), "DB1.334");
-                        writeResultRender(siemensTcpNet.Write("DB1.356", materials[2].MaterialID + "/" + materials[2].MaterialSID), "DB1.356");
-                        writeResultRender(siemensTcpNet.Write("DB1.378", materials[3].MaterialID + "/" + materials[3].MaterialSID), "DB1.378");
-                        writeResultRender(siemensTcpNet.Write("DB1.400", materials[4].MaterialID + "/" + materials[4].MaterialSID), "DB1.400");
-                        writeResultRender(siemensTcpNet.Write("DB1.422", materials[5].MaterialID + "/" + materials[5].MaterialSID), "DB1.422");
-                        writeResultRender(siemensTcpNet.Write("DB1.444", materials[6].MaterialID + "/" + materials[6].MaterialSID), "DB1.444");
-                        writeResultRender(siemensTcpNet.Write("DB1.466", materials[7].MaterialID + "/" + materials[7].MaterialSID), "DB1.466");
-                        writeResultRender(siemensTcpNet.Write("DB1.488", materials[8].MaterialID + "/" + materials[8].MaterialSID), "DB1.488");
-                        writeResultRender(siemensTcpNet.Write("DB1.510", materials[9].MaterialID + "/" + materials[9].MaterialSID), "DB1.510");
-                    }
-                    catch (Exception ex) { }
-                }
-                MaterialIDSearchSignal = siemensTcpNet.ReadInt16("DB1.830").Content;    //更新物料查询标志
-
-                IronMeltSuppMaterialWeight = siemensTcpNet.ReadInt32("地址名").Content;//加料(孕育剂)重量
-
-                //故障查询                 
-                if (siemensTcpNet.ReadInt16("DB1.828").Content - ProblemSearchSignal != 0)
-                {
-                    try
-                    {
-                        int ProblemPage = siemensTcpNet.ReadInt16("DB1.776").Content;
-                        problemCates = ProblemCateDAL.LoadProblemCates(1);
-                        this.listBox1.Items.Add(problemCates[0].ProblemCateDesc);
-
-                        if (ProblemPage == 0)
-                        {
-                            writeResultRender(siemensTcpNet.Write("DB1.564", problemCates[0].ProblemCateDesc + "/" + problemCates[0].ProblemCateSID), "DB1.564");
-                            writeResultRender(siemensTcpNet.Write("DB1.606", problemCates[1].ProblemCateDesc + "/" + problemCates[1].ProblemCateSID), "DB1.606");
-                            writeResultRender(siemensTcpNet.Write("DB1.648", problemCates[2].ProblemCateDesc + "/" + problemCates[2].ProblemCateSID), "DB1.648");
-                            writeResultRender(siemensTcpNet.Write("DB1.690", problemCates[3].ProblemCateDesc + "/" + problemCates[3].ProblemCateSID), "DB1.690");
-                            writeResultRender(siemensTcpNet.Write("DB1.732", problemCates[4].ProblemCateDesc + "/" + problemCates[4].ProblemCateSID), "DB1.732");
-                        }
-                        if (ProblemPage == 1)
-                        {
-                            writeResultRender(siemensTcpNet.Write("DB1.564", problemCates[5].ProblemCateDesc), "DB1.564");
-                        }
-                    }
-                    catch (Exception ex) { }
-                }
-                ProblemSearchSignal = siemensTcpNet.ReadInt16("DB1.828").Content;     //更新故障查询标志
-
-                bool ProblemStopSignal = siemensTcpNet.ReadBool("地址名").Content;    //故障停机标志，写入故障类别，故障开始时间，故障结束时间，恢复生产时间
-                if (ProblemStopSignal == true)
-                {
-                    string Ftime = DateTime.Now.ToString("[HH:mm:ss] ");
-
-                    bool RepairStopSignal = siemensTcpNet.ReadBool("地址名").Content;
-                    if (RepairStopSignal == true)
-                    {
-                        string FRtime = DateTime.Now.ToString("[HH:mm:ss] ");
-                    }
-
-                    bool 恢复生产读取标志 = siemensTcpNet.ReadBool("地址名").Content;
-                    if (恢复生产读取标志 == true)
-                    {
-                        string PRtime = DateTime.Now.ToString("[HH:mm:ss] ");
-                        string 停机原因 = siemensTcpNet.ReadString("地址", 40).Content;
-                        //存入数据库“ProductionProblem	”的“ProductionProblemRemark”
-                    }
-
-                }
-
-              
-                IronMeltSuppMaterialTime = DateTime.Now;//铁水转运加料时间
-
+                ironMeltTrans.IronMeltTransWeight = siemensTcpNet.ReadInt16("DB1.0").Content;//铁水重量 
+                ironMeltTrans.IronMeltTransTime = DateTime.Now;//铁水转运时间                    
+                if (siemensTcpNet.ReadBool("DB1.552").Content == true) ironMeltTrans.BackWeight = siemensTcpNet.ReadInt16("DB1.550").Content;    //行车吊装
+                 
                 result = IronMeltTransDAL.AddIronMeltTransInfo(ironMeltTrans);
                 if (result == 1)
                 {
@@ -624,8 +503,7 @@ namespace HslCommunicationDemo
                 {
                     listBox2.Items.Add("铁水转运写入数据库失败  " + DateTime.Now);
                 }
-                //    IronMeltSuppMaterialDAL.AddIronMeltSuppMaterialInfo(GroupSID,,MaterialSID, IronMeltTransWeight, IronMeltSuppMaterialTime);
-
+      
             }
             catch (Exception ex)
             {
@@ -975,7 +853,132 @@ namespace HslCommunicationDemo
             this.thread8.Abort();
         }
 
-     
+        //铁水转运线程旧
+        //private void ThreadReadServer1()
+        //{
+        //    int result;
+        //    IronMeltTrans ironMeltTrans = new IronMeltTrans();
+        //    int MaterialIDSearchSignal = 0, ProblemSearchSignal = 0;
+        //    int ProblemCateSID, MaterialSID, IronMeltSuppMaterialWeight;
+        //    string ProductionProblemRemark, ProductionProblemBeginTime, ProductionProblemEndTime, ProblemCateDesc, MaterialID;
+        //    DateTime IronMeltTransTime, IronMeltSuppMaterialTime;
+        //    List<Material> materials = null;
+        //    List<ProblemCate> problemCates = null;
+
+        //    try
+        //    {
+        //        //持续读取                                                                   
+        //        int groupinfo = siemensTcpNet.ReadInt16("DB1.540").Content;   //班次
+        //        if (groupinfo == 2) { ironMeltTrans.GroupSID = 6; }
+        //        if (groupinfo == 3) { ironMeltTrans.GroupSID = 5; }
+
+        //        ironMeltTrans.EmployeeSID = siemensTcpNet.ReadInt16("DB1.540").Content;   //员工（测试）
+
+        //        ironMeltTrans.EquipmentSID = siemensTcpNet.ReadInt16("DB1.4").Content;//炉号
+        //        ironMeltTrans.ElectricFurnaceCount = siemensTcpNet.ReadInt16("DB1.6").Content;//炉次
+        //        ironMeltTrans.IronMeltTransNum = siemensTcpNet.ReadInt16("DB1.8").Content;//包次
+        //        ironMeltTrans.IronMeltTransWeight = siemensTcpNet.ReadInt16("DB1.0").Content;//铁水重量   
+
+        //        bool HangCheSignal = siemensTcpNet.ReadBool("DB1.552").Content;      //行车吊装写入标志
+        //        if (HangCheSignal == true)
+        //        {
+        //            ironMeltTrans.BackWeight = siemensTcpNet.ReadInt16("DB1.550").Content;    //回炉铁水重量
+        //        }
+
+        //        IronMeltTransTime = DateTime.Now;//铁水转运时间
+
+        //        //物料查询         
+        //        if (siemensTcpNet.ReadInt16("DB1.830").Content - MaterialIDSearchSignal != 0)
+        //        {
+        //            try
+        //            {
+        //                materials = MaterialDAL.LoadMaterals("YYJ");                   //查询料号                     
+
+        //                writeResultRender(siemensTcpNet.Write("DB1.312", materials[0].MaterialID + "/" + materials[0].MaterialSID), "DB1.312");   //物料信息写入HMI
+        //                writeResultRender(siemensTcpNet.Write("DB1.334", materials[1].MaterialID + "/" + materials[1].MaterialSID), "DB1.334");
+        //                writeResultRender(siemensTcpNet.Write("DB1.356", materials[2].MaterialID + "/" + materials[2].MaterialSID), "DB1.356");
+        //                writeResultRender(siemensTcpNet.Write("DB1.378", materials[3].MaterialID + "/" + materials[3].MaterialSID), "DB1.378");
+        //                writeResultRender(siemensTcpNet.Write("DB1.400", materials[4].MaterialID + "/" + materials[4].MaterialSID), "DB1.400");
+        //                writeResultRender(siemensTcpNet.Write("DB1.422", materials[5].MaterialID + "/" + materials[5].MaterialSID), "DB1.422");
+        //                writeResultRender(siemensTcpNet.Write("DB1.444", materials[6].MaterialID + "/" + materials[6].MaterialSID), "DB1.444");
+        //                writeResultRender(siemensTcpNet.Write("DB1.466", materials[7].MaterialID + "/" + materials[7].MaterialSID), "DB1.466");
+        //                writeResultRender(siemensTcpNet.Write("DB1.488", materials[8].MaterialID + "/" + materials[8].MaterialSID), "DB1.488");
+        //                writeResultRender(siemensTcpNet.Write("DB1.510", materials[9].MaterialID + "/" + materials[9].MaterialSID), "DB1.510");
+        //            }
+        //            catch (Exception ex) { }
+        //        }
+        //        MaterialIDSearchSignal = siemensTcpNet.ReadInt16("DB1.830").Content;    //更新物料查询标志
+
+        //        IronMeltSuppMaterialWeight = siemensTcpNet.ReadInt32("地址名").Content;//加料(孕育剂)重量
+
+        //        //故障查询                 
+        //        if (siemensTcpNet.ReadInt16("DB1.828").Content - ProblemSearchSignal != 0)
+        //        {
+        //            try
+        //            {
+        //                int ProblemPage = siemensTcpNet.ReadInt16("DB1.776").Content;
+        //                problemCates = ProblemCateDAL.LoadProblemCates(1);
+        //                this.listBox1.Items.Add(problemCates[0].ProblemCateDesc);
+
+        //                if (ProblemPage == 0)
+        //                {
+        //                    writeResultRender(siemensTcpNet.Write("DB1.564", problemCates[0].ProblemCateDesc + "/" + problemCates[0].ProblemCateSID), "DB1.564");
+        //                    writeResultRender(siemensTcpNet.Write("DB1.606", problemCates[1].ProblemCateDesc + "/" + problemCates[1].ProblemCateSID), "DB1.606");
+        //                    writeResultRender(siemensTcpNet.Write("DB1.648", problemCates[2].ProblemCateDesc + "/" + problemCates[2].ProblemCateSID), "DB1.648");
+        //                    writeResultRender(siemensTcpNet.Write("DB1.690", problemCates[3].ProblemCateDesc + "/" + problemCates[3].ProblemCateSID), "DB1.690");
+        //                    writeResultRender(siemensTcpNet.Write("DB1.732", problemCates[4].ProblemCateDesc + "/" + problemCates[4].ProblemCateSID), "DB1.732");
+        //                }
+        //                if (ProblemPage == 1)
+        //                {
+        //                    writeResultRender(siemensTcpNet.Write("DB1.564", problemCates[5].ProblemCateDesc), "DB1.564");
+        //                }
+        //            }
+        //            catch (Exception ex) { }
+        //        }
+        //        ProblemSearchSignal = siemensTcpNet.ReadInt16("DB1.828").Content;     //更新故障查询标志
+
+        //        bool ProblemStopSignal = siemensTcpNet.ReadBool("地址名").Content;    //故障停机标志，写入故障类别，故障开始时间，故障结束时间，恢复生产时间
+        //        if (ProblemStopSignal == true)
+        //        {
+        //            string Ftime = DateTime.Now.ToString("[HH:mm:ss] ");
+
+        //            bool RepairStopSignal = siemensTcpNet.ReadBool("地址名").Content;
+        //            if (RepairStopSignal == true)
+        //            {
+        //                string FRtime = DateTime.Now.ToString("[HH:mm:ss] ");
+        //            }
+
+        //            bool 恢复生产读取标志 = siemensTcpNet.ReadBool("地址名").Content;
+        //            if (恢复生产读取标志 == true)
+        //            {
+        //                string PRtime = DateTime.Now.ToString("[HH:mm:ss] ");
+        //                string 停机原因 = siemensTcpNet.ReadString("地址", 40).Content;
+        //                //存入数据库“ProductionProblem	”的“ProductionProblemRemark”
+        //            }
+
+        //        }
+
+
+        //        IronMeltSuppMaterialTime = DateTime.Now;//铁水转运加料时间
+
+        //        result = IronMeltTransDAL.AddIronMeltTransInfo(ironMeltTrans);
+        //        if (result == 1)
+        //        {
+        //            listBox2.Items.Add("铁水转运写入数据库成功  " + DateTime.Now);
+        //        }
+        //        else
+        //        {
+        //            listBox2.Items.Add("铁水转运写入数据库失败  " + DateTime.Now);
+        //        }
+        //        //    IronMeltSuppMaterialDAL.AddIronMeltSuppMaterialInfo(GroupSID,,MaterialSID, IronMeltTransWeight, IronMeltSuppMaterialTime);
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("铁水转运出现问题：" + ex.Message);
+        //    }
+
+        //}
 
         #endregion
     }

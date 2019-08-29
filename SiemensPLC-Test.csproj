@@ -96,6 +96,7 @@
     <Compile Include="DAL\BasicData\ProductionProblemDAL.cs" />
     <Compile Include="DAL\BasicData\ProblemCateDAL.cs" />
     <Compile Include="DAL\BasicData\MaterialDAL.cs" />
+    <Compile Include="DAL\DataGet\ProductionScheduleDAL.cs" />
     <Compile Include="DAL\DataGet\IronMeltSuppMaterialDAL.cs" />
     <Compile Include="DAL\DataGet\BlastingDAL.cs" />
     <Compile Include="DAL\DataGet\ModellingDAL.cs" />
@@ -112,6 +113,7 @@
     </Compile>
     <Compile Include="Model\BasicData\ProductionProblem.cs" />
     <Compile Include="Model\BasicData\ProblemCate.cs" />
+    <Compile Include="Model\DataGet\ProductionSchedule.cs" />
     <Compile Include="Model\DataGet\IronMeltSuppMaterial.cs" />
     <Compile Include="Model\DataGet\Blasting.cs" />
     <Compile Include="Model\DataGet\Modelling.cs" />

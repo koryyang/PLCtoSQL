@@ -8,6 +8,9 @@ namespace FuhuaMiddleware.Model
 {
     public class IronMeltTrans
     {
+        [ColumnMapping("ProductionScheduleSID", "-1")]   //订单
+        public int ProductionScheduleSID { get; set; }
+
         [ColumnMapping("DeptSID", "-1")]   //部门
         public int DeptSID { get; set; }
 
