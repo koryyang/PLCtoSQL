@@ -24,8 +24,6 @@ namespace FuhuaMiddleware.Model
         [ColumnMapping("IronMeltSuppMaterialTime", "9999-12-31")]  //加料时间
         public DateTime IronMeltSuppMaterialTime { get; set; }
 
-        [ColumnMapping("IronMeltSuppMaterialRemark", "")]          //备注
-        public string IronMeltSuppMaterialRemark { get; set; }
 
 
 

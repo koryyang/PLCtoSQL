@@ -14,6 +14,9 @@ namespace FuhuaMiddleware.Model
         [ColumnMapping("DeptSID", "-1")]   //部门
         public int DeptSID { get; set; }
 
+        [ColumnMapping("IronMeltTranSID", "-1")]   //铁水SID
+        public int IronMeltTranSID { get; set; }
+
         [ColumnMapping("EmployeeSID", "-1")]   //员工
         public int EmployeeSID { get; set; }
 

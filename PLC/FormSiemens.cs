@@ -430,7 +430,7 @@ namespace HslCommunicationDemo
 
         #region 数据采集
 
-        private Thread thread1, thread2, thread3, thread4, thread5, thread6 ,thread7 ,thread8 = null;
+        private Thread thread1, thread2, thread3, thread4, thread5, thread6 ,thread7 ,thread8,thread9 = null;
         private bool isThreadRun = false;          // 用来标记线程的运行状态，初始未点击启动按钮时不开启  
         System.Timers.Timer timer = null;
         private int day = 0;
@@ -469,7 +469,9 @@ namespace HslCommunicationDemo
                     thread8.Start();
                 }
             }
-
+            thread9 = new Thread(ThreadReadServer9);
+            thread9.IsBackground = true;
+            thread9.Start();
         }
 
     
@@ -495,6 +497,7 @@ namespace HslCommunicationDemo
                 if (siemensTcpNet.ReadBool("DB1.552").Content == true) ironMeltTrans.BackWeight = siemensTcpNet.ReadInt16("DB1.550").Content;    //行车吊装
                  
                 result = IronMeltTransDAL.AddIronMeltTransInfo(ironMeltTrans);
+
                 if (result == 1)
                 {
                     listBox2.Items.Add("铁水转运写入数据库成功  " + DateTime.Now);
@@ -510,7 +513,38 @@ namespace HslCommunicationDemo
                 MessageBox.Show("铁水转运出现问题：" + ex.Message);
             }
 
-        }     
+        }
+
+        //铁水转运加料线程
+        private void ThreadReadServer9()
+        {
+            int result = 0;
+            IronMeltSuppMaterial ironMeltSuppMaterial = new IronMeltSuppMaterial();
+
+            try
+            {
+                int groupSID;
+                ironMeltSuppMaterial.IronMeltTranSID = IronMeltTransDAL.GetIronMeltTransSID(out groupSID);
+                ironMeltSuppMaterial.GroupSID = groupSID;
+                ironMeltSuppMaterial.IronMeltSuppMaterialWeight = siemensTcpNet.ReadInt32("地址名").Content;//加料(孕育剂)重量
+                ironMeltSuppMaterial.IronMeltSuppMaterialTime = DateTime.Now;
+                result = IronMeltSuppMaterialDAL.AddIronMeltSuppMaterial(ironMeltSuppMaterial);
+                if (result == 1)
+                {
+                    listBox2.Items.Add("铁水转运加料写入数据库成功  " + DateTime.Now);
+                }
+                else
+                {
+                    listBox2.Items.Add("铁水转运加料写入数据库失败  " + DateTime.Now);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("铁水转运加料出现问题：" + ex.Message);
+            }
+
+        }
 
         //1号打磨线程
         private void ThreadReadServer2()

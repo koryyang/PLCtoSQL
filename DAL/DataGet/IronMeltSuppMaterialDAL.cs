@@ -35,20 +35,13 @@ namespace FuhuaMiddleware.DAL
         #endregion
 
         #region 新增铁水转运加料信息
-        public static int AddIronMeltSuppMaterialInfo(int groupSID,int ironMeltTranSID, int materialSID, int ironMeltSuppMaterialWeight, DateTime ironMeltSuppMaterialTime)
+        public static int AddIronMeltSuppMaterial(IronMeltSuppMaterial ironMeltSuppMaterial)
         {
-            IronMeltSuppMaterial ironMeltSuppMaterial = new IronMeltSuppMaterial();
-            ironMeltSuppMaterial.GroupSID = groupSID;
-            ironMeltSuppMaterial.IronMeltTranSID = ironMeltTranSID;
-            ironMeltSuppMaterial.MaterialSID = materialSID;
-            ironMeltSuppMaterial.IronMeltSuppMaterialWeight = ironMeltSuppMaterialWeight;
-            ironMeltSuppMaterial.IronMeltSuppMaterialTime = ironMeltSuppMaterialTime;
-
-
+       
             int result = 0;
             try
             {
-                result = DataFactory.UpdateEntity(ironMeltSuppMaterial, "GroupSID,IronMeltTranSID,MaterialSID,IronMeltSuppMaterialWeight,IronMeltSuppMaterialTime", "DG_IronMeltSuppMaterial_INS_MW");
+                result = DataFactory.UpdateEntity(ironMeltSuppMaterial, "GroupSID,IronMeltTranSID,MaterialSID,IronMeltSuppMaterialWeight,IronMeltSuppMaterialTime", "MW_IronMeltSuppMaterial_INS");
             }
             catch (Exception)
             {

@@ -52,6 +52,28 @@ namespace FuhuaMiddleware.DAL
 
         #endregion
 
-     
+        #region 查询铁水最新SID和班组SID
+        public static int GetIronMeltTransSID(out int groupSID)
+        {
+            List<IronMeltTrans> ironMeltTranss = null;
+            IronMeltTrans ironMeltTrans = new IronMeltTrans();
+
+            try
+            {
+                ironMeltTranss = DataFactory.FillEntities<IronMeltTrans>(ironMeltTrans, "", "MW_IronMeltTranSID_SEL");
+            }
+            catch (Exception ex)
+            {
+                ironMeltTranss = new List<IronMeltTrans>();
+            }
+            groupSID = ironMeltTranss[0].GroupSID;
+            return ironMeltTranss[0].IronMeltTranSID;
+        }
+
+        #endregion
+
+
+
+
     }
 }
