@@ -6,9 +6,7 @@ using System.Drawing;
 using System.Linq;  
 using System.Text;
 using System.Windows.Forms;
-
 using System.Threading;         //多线程
-
 using HslCommunication;     //通讯库
 using HslCommunication.Profinet;
 using HslCommunication.Profinet.Siemens; //通讯库-西门子
