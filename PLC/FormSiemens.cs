@@ -34,6 +34,10 @@ namespace HslCommunicationDemo
             timer.Interval = 10000;
             timer.Start();
             timer.Elapsed += timer_Elapsed;
+            thread1 = new Thread(ThreadReadServer1);
+            thread1.IsBackground = true;
+            thread1.Start();
+
         }
 
         private SiemensS7Net siemensTcpNet = null;
@@ -434,14 +438,13 @@ namespace HslCommunicationDemo
         private bool isThreadRun = false;          // 用来标记线程的运行状态，初始未点击启动按钮时不开启  
         System.Timers.Timer timer = null;
         private int day = 0;
-       
-  
+        private bool ironWriteSQL = false;
+        
+        
         //时延函数，启动线程
         void timer_Elapsed(object sender,System.Timers.ElapsedEventArgs e)
         {
-            thread1 = new Thread(ThreadReadServer1);
-            thread1.IsBackground = true;
-            thread1.Start();
+
             thread2 = new Thread(ThreadReadServer2);
             thread2.IsBackground = true;
             thread2.Start();
@@ -469,12 +472,9 @@ namespace HslCommunicationDemo
                     thread8.Start();
                 }
             }
-            thread9 = new Thread(ThreadReadServer9);
-            thread9.IsBackground = true;
-            thread9.Start();
+   
         }
-
-    
+   
         //铁水转运线程
         private void ThreadReadServer1()
         {
@@ -495,54 +495,57 @@ namespace HslCommunicationDemo
                 ironMeltTrans.IronMeltTransWeight = siemensTcpNet.ReadInt16("DB1.0").Content;//铁水重量 
                 ironMeltTrans.IronMeltTransTime = DateTime.Now;//铁水转运时间                    
                 if (siemensTcpNet.ReadBool("DB1.552").Content == true) ironMeltTrans.BackWeight = siemensTcpNet.ReadInt16("DB1.550").Content;    //行车吊装
-                 
-                result = IronMeltTransDAL.AddIronMeltTransInfo(ironMeltTrans);
+                
+                //根据标志上升沿写入数据库
+                if(Convert.ToInt16(siemensTcpNet.ReadBool("DB1.826.4").Content) - Convert.ToInt16(ironWriteSQL) == 1)
+                { 
+                    result = IronMeltTransDAL.AddIronMeltTransInfo(ironMeltTrans);
 
-                if (result == 1)
-                {
-                    listBox2.Items.Add("铁水转运写入数据库成功  " + DateTime.Now);
+                    if (result == 1)
+                    {
+                       
+                        listBox2.Items.Add("铁水转运写入数据库成功  " + DateTime.Now);
+                        int result2 = 0;
+                        IronMeltSuppMaterial ironMeltSuppMaterial = new IronMeltSuppMaterial();
+                        int groupSID;
+                        ironMeltSuppMaterial.IronMeltTranSID = IronMeltTransDAL.GetIronMeltTransSID(out groupSID);
+                        ironMeltSuppMaterial.GroupSID = groupSID;
+                        ironMeltSuppMaterial.MaterialSID = 77; //暂定这种孕育剂
+                        ironMeltSuppMaterial.IronMeltSuppMaterialWeight = siemensTcpNet.ReadInt16("DB1.2").Content;//加料(孕育剂)重量
+                        ironMeltSuppMaterial.IronMeltSuppMaterialTime = DateTime.Now;
+                        try
+                        {
+                            result2 = IronMeltSuppMaterialDAL.AddIronMeltSuppMaterial(ironMeltSuppMaterial);
+                            if (result2 == 1)
+                            {
+                                listBox2.Items.Add("铁水转运加料写入数据库成功  " + DateTime.Now);
+                            }
+                            else
+                            {
+                                listBox2.Items.Add("铁水转运加料写入数据库失败  " + DateTime.Now);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("铁水转运加料出现问题：" + ex.Message);
+                        }
+
+                    }
+                    else
+                    {
+                        listBox2.Items.Add("铁水转运写入数据库失败  " + DateTime.Now);
+                    }
                 }
-                else
-                {
-                    listBox2.Items.Add("铁水转运写入数据库失败  " + DateTime.Now);
-                }
-      
+
+                ironWriteSQL = siemensTcpNet.ReadBool("DB1.826.4").Content;//更新标志
+
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show("铁水转运出现问题：" + ex.Message);
             }
-
-        }
-
-        //铁水转运加料线程
-        private void ThreadReadServer9()
-        {
-            int result = 0;
-            IronMeltSuppMaterial ironMeltSuppMaterial = new IronMeltSuppMaterial();
-
-            try
-            {
-                int groupSID;
-                ironMeltSuppMaterial.IronMeltTranSID = IronMeltTransDAL.GetIronMeltTransSID(out groupSID);
-                ironMeltSuppMaterial.GroupSID = groupSID;
-                ironMeltSuppMaterial.IronMeltSuppMaterialWeight = siemensTcpNet.ReadInt32("地址名").Content;//加料(孕育剂)重量
-                ironMeltSuppMaterial.IronMeltSuppMaterialTime = DateTime.Now;
-                result = IronMeltSuppMaterialDAL.AddIronMeltSuppMaterial(ironMeltSuppMaterial);
-                if (result == 1)
-                {
-                    listBox2.Items.Add("铁水转运加料写入数据库成功  " + DateTime.Now);
-                }
-                else
-                {
-                    listBox2.Items.Add("铁水转运加料写入数据库失败  " + DateTime.Now);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("铁水转运加料出现问题：" + ex.Message);
-            }
+  
 
         }
 
