@@ -32,9 +32,16 @@ namespace HslCommunicationDemo
             timer.Interval = 10000;
             timer.Start();
             timer.Elapsed += timer_Elapsed;
+
+            //铁水转运线程
             thread1 = new Thread(ThreadReadServer1);
             thread1.IsBackground = true;
             thread1.Start();
+
+            //异常检测线程
+            thread9 = new Thread(ThreadReadServer9);
+            thread9.IsBackground = true;
+            thread9.Start();
 
         }
 
@@ -891,18 +898,60 @@ namespace HslCommunicationDemo
         //通讯异常检测线程
         private void ThreadReadServer9()
         {
-            //定义错误列表，传入地址时要注意顺序
-            var errors = ReadBoolList(new List<string>() { "DB" });
+            //定义错误列表，传入地址时要注意顺序           
+            var errors = ReadBoolList(new List<string>() {
+                #region 读取地址
+                //铁水
+                "M10.1",
+                "M10.3",
+                "M10.5",
+                "M10.7",
+                "M11.1",
+                "M11.3",
+                "M11.5",
+                "M12.1",
+                //造型机
+                "M14.0",
+                "M14.3",
+                //造型线
+                "M15.0",
+                "M15.2",
+                //抛丸
+                "M21.1",
+                "M21.3",
+                //打磨1
+                "M20.1",
+                "M20.5",
+                //打磨2
+                "M20.3",
+                "M20.7",
+                //喷漆
+                "M23.0",
+                //包装
+                "M24.1",
+                "M24.3"
+                #endregion
+            });
             List<int> nums = new List<int>(); //报错的号码列表
                 //遍历errors，看哪几个报错
                 errors.ForEach(error =>
-                {
-                    int index = errors.IndexOf(error);
-                    if (error == true) nums.Add(index);
+                {                
+                    if (error == true)
+                    {
+                        int index = errors.IndexOf(error);
+                        if (index <= 7)  nums.Add(0);
+                        if (index == 8 || index == 9) nums.Add(1);
+                        if (index == 10 || index == 11) nums.Add(2);
+                        if (index == 12 || index == 13) nums.Add(3);
+                        if (index == 14 || index == 15) nums.Add(4);
+                        if (index == 16 || index == 17) nums.Add(5);
+                        if (index == 18) nums.Add(6);
+                        if (index == 19 || index == 20) nums.Add(7);
+                    }
                 });
 
             //定义标签列表，顺序很重要，要与地址顺序对应
-            var labels = new List<Label>() { ZXJ, ZXX, TS, PW, DM1, DM2, PQ, BZ };
+            var labels = new List<Label>() { TS, ZXJ, ZXX, PW, DM1, DM2, PQ, BZ };
 
             labels.ForEach(label => 
             {
