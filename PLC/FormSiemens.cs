@@ -888,6 +888,57 @@ namespace HslCommunicationDemo
             this.thread8.Abort();
         }
 
+        //通讯异常检测线程
+        private void ThreadReadServer9()
+        {
+            //定义错误列表，传入地址时要注意顺序
+            var errors = ReadBoolList(new List<string>() { "DB" });
+            List<int> nums = new List<int>(); //报错的号码列表
+                //遍历errors，看哪几个报错
+                errors.ForEach(error =>
+                {
+                    int index = errors.IndexOf(error);
+                    if (error == true) nums.Add(index);
+                });
+
+            //定义标签列表，顺序很重要，要与地址顺序对应
+            var labels = new List<Label>() { ZXJ, ZXX, TS, PW, DM1, DM2, PQ, BZ };
+
+            labels.ForEach(label => 
+            {
+                if (nums.Exists(num=> num == labels.IndexOf(label)))    //如果label索引在报错列表中
+                typeof(Label).GetProperty("Visible").SetValue(label, true, null);   //报错
+                else typeof(Label).GetProperty("Visible").SetValue(label, false, null); //不在则取消错误
+            });
+
+        }
+
+        //传入地址列表读取布尔值列表
+        private List<bool> ReadBoolList(List<string> adds)
+        {
+            List<bool> results = new List<bool>();
+            adds.ForEach(add => results.Add(siemensTcpNet.ReadBool(add).Content));
+            return results;
+        }
+
+        //传入地址列表读取int16列表
+        private List<int> ReadInt16List(List<string> adds)
+        {
+            List<int> results = new List<int>();
+            adds.ForEach(add => results.Add(siemensTcpNet.ReadInt16(add).Content));
+            return results;
+        }
+
+        //传入地址列表读取int32列表
+        private List<int> ReadInt32List(List<string> adds)
+        {
+            List<int> results = new List<int>();
+            adds.ForEach(add => results.Add(siemensTcpNet.ReadInt32(add).Content));
+            return results;
+        }
+
+
+
         //铁水转运线程旧
         //private void ThreadReadServer1()
         //{

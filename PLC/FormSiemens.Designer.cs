@@ -88,6 +88,14 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
+            this.ZXJ = new System.Windows.Forms.Label();
+            this.ZXX = new System.Windows.Forms.Label();
+            this.TS = new System.Windows.Forms.Label();
+            this.PW = new System.Windows.Forms.Label();
+            this.DM1 = new System.Windows.Forms.Label();
+            this.PQ = new System.Windows.Forms.Label();
+            this.BZ = new System.Windows.Forms.Label();
+            this.DM2 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -205,6 +213,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.BackColor = System.Drawing.SystemColors.ControlDark;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.BZ);
+            this.panel2.Controls.Add(this.PQ);
+            this.panel2.Controls.Add(this.DM2);
+            this.panel2.Controls.Add(this.DM1);
+            this.panel2.Controls.Add(this.PW);
+            this.panel2.Controls.Add(this.TS);
+            this.panel2.Controls.Add(this.ZXX);
+            this.panel2.Controls.Add(this.ZXJ);
             this.panel2.Controls.Add(this.listBox2);
             this.panel2.Controls.Add(this.listBox1);
             this.panel2.Controls.Add(this.groupBox3);
@@ -245,7 +261,7 @@
             this.groupBox3.Controls.Add(this.label11);
             this.groupBox3.Location = new System.Drawing.Point(11, 243);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(787, 154);
+            this.groupBox3.Size = new System.Drawing.Size(605, 188);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "批量读取测试：";
@@ -256,7 +272,7 @@
             this.textBox10.Multiline = true;
             this.textBox10.Name = "textBox10";
             this.textBox10.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox10.Size = new System.Drawing.Size(692, 78);
+            this.textBox10.Size = new System.Drawing.Size(518, 109);
             this.textBox10.TabIndex = 10;
             // 
             // label13
@@ -713,6 +729,86 @@
             this.button4.Text = "使用说明";
             this.button4.UseVisualStyleBackColor = true;
             // 
+            // ZXJ
+            // 
+            this.ZXJ.AutoSize = true;
+            this.ZXJ.ForeColor = System.Drawing.Color.Red;
+            this.ZXJ.Location = new System.Drawing.Point(635, 257);
+            this.ZXJ.Name = "ZXJ";
+            this.ZXJ.Size = new System.Drawing.Size(129, 20);
+            this.ZXJ.TabIndex = 5;
+            this.ZXJ.Text = "造型机通讯异常！";
+            // 
+            // ZXX
+            // 
+            this.ZXX.AutoSize = true;
+            this.ZXX.ForeColor = System.Drawing.Color.Red;
+            this.ZXX.Location = new System.Drawing.Point(635, 282);
+            this.ZXX.Name = "ZXX";
+            this.ZXX.Size = new System.Drawing.Size(129, 20);
+            this.ZXX.TabIndex = 5;
+            this.ZXX.Text = "造型线通讯异常！";
+            // 
+            // TS
+            // 
+            this.TS.AutoSize = true;
+            this.TS.ForeColor = System.Drawing.Color.Red;
+            this.TS.Location = new System.Drawing.Point(635, 307);
+            this.TS.Name = "TS";
+            this.TS.Size = new System.Drawing.Size(144, 20);
+            this.TS.TabIndex = 5;
+            this.TS.Text = "铁水转运通讯异常！";
+            // 
+            // PW
+            // 
+            this.PW.AutoSize = true;
+            this.PW.ForeColor = System.Drawing.Color.Red;
+            this.PW.Location = new System.Drawing.Point(635, 332);
+            this.PW.Name = "PW";
+            this.PW.Size = new System.Drawing.Size(114, 20);
+            this.PW.TabIndex = 5;
+            this.PW.Text = "抛丸通讯异常！";
+            // 
+            // DM1
+            // 
+            this.DM1.AutoSize = true;
+            this.DM1.ForeColor = System.Drawing.Color.Red;
+            this.DM1.Location = new System.Drawing.Point(635, 357);
+            this.DM1.Name = "DM1";
+            this.DM1.Size = new System.Drawing.Size(123, 20);
+            this.DM1.TabIndex = 5;
+            this.DM1.Text = "打磨1通讯异常！";
+            // 
+            // PQ
+            // 
+            this.PQ.AutoSize = true;
+            this.PQ.ForeColor = System.Drawing.Color.Red;
+            this.PQ.Location = new System.Drawing.Point(635, 382);
+            this.PQ.Name = "PQ";
+            this.PQ.Size = new System.Drawing.Size(114, 20);
+            this.PQ.TabIndex = 5;
+            this.PQ.Text = "喷漆通讯异常！";
+            // 
+            // BZ
+            // 
+            this.BZ.AutoSize = true;
+            this.BZ.ForeColor = System.Drawing.Color.Red;
+            this.BZ.Location = new System.Drawing.Point(635, 407);
+            this.BZ.Name = "BZ";
+            this.BZ.Size = new System.Drawing.Size(114, 20);
+            this.BZ.TabIndex = 5;
+            this.BZ.Text = "包装通讯异常！";
+            // 
+            // DM2
+            // 
+            this.DM2.AutoSize = true;
+            this.DM2.ForeColor = System.Drawing.Color.Red;
+            this.DM2.Location = new System.Drawing.Point(797, 357);
+            this.DM2.Name = "DM2";
+            this.DM2.Size = new System.Drawing.Size(123, 20);
+            this.DM2.TabIndex = 5;
+            this.DM2.Text = "打磨2通讯异常！";
+            // 
             // FormSiemens
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -735,6 +831,7 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -807,5 +904,13 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.ListBox listBox2;
+        private System.Windows.Forms.Label BZ;
+        private System.Windows.Forms.Label PQ;
+        private System.Windows.Forms.Label DM2;
+        private System.Windows.Forms.Label DM1;
+        private System.Windows.Forms.Label PW;
+        private System.Windows.Forms.Label TS;
+        private System.Windows.Forms.Label ZXX;
+        private System.Windows.Forms.Label ZXJ;
     }
 }
