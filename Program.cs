@@ -24,7 +24,7 @@ namespace HslCommunicationDemo
             Application.SetCompatibleTextRenderingDefault( false );
 
             System.Threading.ThreadPool.SetMaxThreads( 2000, 800 );
-            Application.Run( new FormLoad( ) );
+            Application.Run( new FormSiemens(HslCommunication.Profinet.Siemens.SiemensPLCS.S1500) );//直接启动1500
 
         }
     }

@@ -40,6 +40,14 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.BZ = new System.Windows.Forms.Label();
+            this.PQ = new System.Windows.Forms.Label();
+            this.DM2 = new System.Windows.Forms.Label();
+            this.DM1 = new System.Windows.Forms.Label();
+            this.PW = new System.Windows.Forms.Label();
+            this.TS = new System.Windows.Forms.Label();
+            this.ZXX = new System.Windows.Forms.Label();
+            this.ZXJ = new System.Windows.Forms.Label();
             this.listBox2 = new System.Windows.Forms.ListBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -88,14 +96,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
-            this.ZXJ = new System.Windows.Forms.Label();
-            this.ZXX = new System.Windows.Forms.Label();
-            this.TS = new System.Windows.Forms.Label();
-            this.PW = new System.Windows.Forms.Label();
-            this.DM1 = new System.Windows.Forms.Label();
-            this.PQ = new System.Windows.Forms.Label();
-            this.BZ = new System.Windows.Forms.Label();
-            this.DM2 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -129,7 +130,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(702, 28);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(174, 20);
+            this.label2.Size = new System.Drawing.Size(140, 17);
             this.label2.TabIndex = 8;
             this.label2.Text = "暂不支持数据库写入功能";
             // 
@@ -146,7 +147,7 @@
             this.label21.AutoSize = true;
             this.label21.Location = new System.Drawing.Point(702, 4);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(84, 20);
+            this.label21.Size = new System.Drawing.Size(68, 17);
             this.label21.TabIndex = 6;
             this.label21.Text = "地址示例：";
             // 
@@ -176,7 +177,7 @@
             this.textBox2.Location = new System.Drawing.Point(305, 14);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(141, 27);
+            this.textBox2.Size = new System.Drawing.Size(141, 23);
             this.textBox2.TabIndex = 3;
             this.textBox2.Text = "102";
             // 
@@ -185,7 +186,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(246, 17);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(69, 20);
+            this.label3.Size = new System.Drawing.Size(57, 17);
             this.label3.TabIndex = 2;
             this.label3.Text = "连接ID：";
             // 
@@ -193,7 +194,7 @@
             // 
             this.textBox1.Location = new System.Drawing.Point(62, 14);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(141, 27);
+            this.textBox1.Size = new System.Drawing.Size(141, 23);
             this.textBox1.TabIndex = 1;
             this.textBox1.Text = "192.168.10.234";
             // 
@@ -202,7 +203,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(5, 17);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(68, 20);
+            this.label1.Size = new System.Drawing.Size(56, 17);
             this.label1.TabIndex = 0;
             this.label1.Text = "Ip地址：";
             // 
@@ -213,6 +214,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.BackColor = System.Drawing.SystemColors.ControlDark;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.button3);
             this.panel2.Controls.Add(this.BZ);
             this.panel2.Controls.Add(this.PQ);
             this.panel2.Controls.Add(this.DM2);
@@ -232,22 +234,102 @@
             this.panel2.Size = new System.Drawing.Size(1320, 453);
             this.panel2.TabIndex = 1;
             // 
+            // BZ
+            // 
+            this.BZ.AutoSize = true;
+            this.BZ.ForeColor = System.Drawing.Color.Red;
+            this.BZ.Location = new System.Drawing.Point(635, 407);
+            this.BZ.Name = "BZ";
+            this.BZ.Size = new System.Drawing.Size(92, 17);
+            this.BZ.TabIndex = 5;
+            this.BZ.Text = "包装通讯异常！";
+            // 
+            // PQ
+            // 
+            this.PQ.AutoSize = true;
+            this.PQ.ForeColor = System.Drawing.Color.Red;
+            this.PQ.Location = new System.Drawing.Point(635, 382);
+            this.PQ.Name = "PQ";
+            this.PQ.Size = new System.Drawing.Size(92, 17);
+            this.PQ.TabIndex = 5;
+            this.PQ.Text = "喷漆通讯异常！";
+            // 
+            // DM2
+            // 
+            this.DM2.AutoSize = true;
+            this.DM2.ForeColor = System.Drawing.Color.Red;
+            this.DM2.Location = new System.Drawing.Point(797, 357);
+            this.DM2.Name = "DM2";
+            this.DM2.Size = new System.Drawing.Size(99, 17);
+            this.DM2.TabIndex = 5;
+            this.DM2.Text = "打磨2通讯异常！";
+            // 
+            // DM1
+            // 
+            this.DM1.AutoSize = true;
+            this.DM1.ForeColor = System.Drawing.Color.Red;
+            this.DM1.Location = new System.Drawing.Point(635, 357);
+            this.DM1.Name = "DM1";
+            this.DM1.Size = new System.Drawing.Size(99, 17);
+            this.DM1.TabIndex = 5;
+            this.DM1.Text = "打磨1通讯异常！";
+            // 
+            // PW
+            // 
+            this.PW.AutoSize = true;
+            this.PW.ForeColor = System.Drawing.Color.Red;
+            this.PW.Location = new System.Drawing.Point(635, 332);
+            this.PW.Name = "PW";
+            this.PW.Size = new System.Drawing.Size(92, 17);
+            this.PW.TabIndex = 5;
+            this.PW.Text = "抛丸通讯异常！";
+            // 
+            // TS
+            // 
+            this.TS.AutoSize = true;
+            this.TS.ForeColor = System.Drawing.Color.Red;
+            this.TS.Location = new System.Drawing.Point(635, 307);
+            this.TS.Name = "TS";
+            this.TS.Size = new System.Drawing.Size(116, 17);
+            this.TS.TabIndex = 5;
+            this.TS.Text = "铁水转运通讯异常！";
+            // 
+            // ZXX
+            // 
+            this.ZXX.AutoSize = true;
+            this.ZXX.ForeColor = System.Drawing.Color.Red;
+            this.ZXX.Location = new System.Drawing.Point(635, 282);
+            this.ZXX.Name = "ZXX";
+            this.ZXX.Size = new System.Drawing.Size(104, 17);
+            this.ZXX.TabIndex = 5;
+            this.ZXX.Text = "造型线通讯异常！";
+            // 
+            // ZXJ
+            // 
+            this.ZXJ.AutoSize = true;
+            this.ZXJ.ForeColor = System.Drawing.Color.Red;
+            this.ZXJ.Location = new System.Drawing.Point(635, 257);
+            this.ZXJ.Name = "ZXJ";
+            this.ZXJ.Size = new System.Drawing.Size(104, 17);
+            this.ZXJ.TabIndex = 5;
+            this.ZXJ.Text = "造型机通讯异常！";
+            // 
             // listBox2
             // 
             this.listBox2.FormattingEnabled = true;
-            this.listBox2.ItemHeight = 20;
+            this.listBox2.ItemHeight = 17;
             this.listBox2.Location = new System.Drawing.Point(1061, 127);
             this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(254, 304);
+            this.listBox2.Size = new System.Drawing.Size(254, 293);
             this.listBox2.TabIndex = 4;
             // 
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 20;
+            this.listBox1.ItemHeight = 17;
             this.listBox1.Location = new System.Drawing.Point(1061, 4);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(254, 104);
+            this.listBox1.Size = new System.Drawing.Size(254, 89);
             this.listBox1.TabIndex = 3;
             // 
             // groupBox3
@@ -280,7 +362,7 @@
             this.label13.AutoSize = true;
             this.label13.Location = new System.Drawing.Point(9, 62);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(84, 20);
+            this.label13.Size = new System.Drawing.Size(68, 17);
             this.label13.TabIndex = 9;
             this.label13.Text = "读取结果：";
             // 
@@ -298,7 +380,7 @@
             // 
             this.textBox9.Location = new System.Drawing.Point(234, 29);
             this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(102, 27);
+            this.textBox9.Size = new System.Drawing.Size(102, 23);
             this.textBox9.TabIndex = 7;
             this.textBox9.Text = "10";
             // 
@@ -307,7 +389,7 @@
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(185, 30);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(54, 20);
+            this.label12.Size = new System.Drawing.Size(44, 17);
             this.label12.TabIndex = 6;
             this.label12.Text = "长度：";
             // 
@@ -315,7 +397,7 @@
             // 
             this.textBox6.Location = new System.Drawing.Point(83, 30);
             this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(102, 27);
+            this.textBox6.Size = new System.Drawing.Size(102, 23);
             this.textBox6.TabIndex = 5;
             this.textBox6.Text = "DB1.1";
             // 
@@ -324,7 +406,7 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(9, 30);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(84, 20);
+            this.label11.Size = new System.Drawing.Size(68, 17);
             this.label11.TabIndex = 4;
             this.label11.Text = "绝对地址：";
             // 
@@ -481,7 +563,7 @@
             this.textBox7.Location = new System.Drawing.Point(88, 57);
             this.textBox7.Name = "textBox7";
             this.textBox7.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox7.Size = new System.Drawing.Size(113, 27);
+            this.textBox7.Size = new System.Drawing.Size(113, 23);
             this.textBox7.TabIndex = 5;
             this.textBox7.Text = "False";
             // 
@@ -490,7 +572,7 @@
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(9, 58);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(84, 19);
+            this.label9.Size = new System.Drawing.Size(68, 17);
             this.label9.TabIndex = 4;
             this.label9.Text = "写入的值：";
             // 
@@ -498,7 +580,7 @@
             // 
             this.textBox8.Location = new System.Drawing.Point(88, 28);
             this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(113, 27);
+            this.textBox8.Size = new System.Drawing.Size(113, 23);
             this.textBox8.TabIndex = 3;
             this.textBox8.Text = "M100";
             // 
@@ -507,7 +589,7 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(9, 30);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(84, 19);
+            this.label10.Size = new System.Drawing.Size(68, 17);
             this.label10.TabIndex = 2;
             this.label10.Text = "绝对地址：";
             // 
@@ -541,7 +623,7 @@
             // 
             this.textBox5.Location = new System.Drawing.Point(389, 196);
             this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(41, 27);
+            this.textBox5.Size = new System.Drawing.Size(41, 23);
             this.textBox5.TabIndex = 17;
             this.textBox5.Text = "10";
             // 
@@ -669,7 +751,7 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(9, 58);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(84, 20);
+            this.label7.Size = new System.Drawing.Size(68, 17);
             this.label7.TabIndex = 4;
             this.label7.Text = "读取结果：";
             // 
@@ -677,7 +759,7 @@
             // 
             this.textBox3.Location = new System.Drawing.Point(83, 27);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(226, 27);
+            this.textBox3.Size = new System.Drawing.Size(226, 23);
             this.textBox3.TabIndex = 3;
             this.textBox3.Text = "DB1.8";
             // 
@@ -686,7 +768,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(9, 30);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(84, 20);
+            this.label6.Size = new System.Drawing.Size(68, 17);
             this.label6.TabIndex = 2;
             this.label6.Text = "绝对地址：";
             // 
@@ -695,7 +777,7 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(310, 198);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(84, 20);
+            this.label8.Size = new System.Drawing.Size(68, 17);
             this.label8.TabIndex = 18;
             this.label8.Text = "读取长度：";
             // 
@@ -704,7 +786,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(1052, 5);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(84, 20);
+            this.label4.Size = new System.Drawing.Size(68, 17);
             this.label4.TabIndex = 4;
             this.label4.Text = "使用协议：";
             // 
@@ -715,7 +797,7 @@
             this.label5.ForeColor = System.Drawing.Color.Red;
             this.label5.Location = new System.Drawing.Point(1126, 5);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(102, 20);
+            this.label5.Size = new System.Drawing.Size(82, 17);
             this.label5.TabIndex = 5;
             this.label5.Text = "西门子S7协议";
             // 
@@ -729,89 +811,19 @@
             this.button4.Text = "使用说明";
             this.button4.UseVisualStyleBackColor = true;
             // 
-            // ZXJ
+            // button3
             // 
-            this.ZXJ.AutoSize = true;
-            this.ZXJ.ForeColor = System.Drawing.Color.Red;
-            this.ZXJ.Location = new System.Drawing.Point(635, 257);
-            this.ZXJ.Name = "ZXJ";
-            this.ZXJ.Size = new System.Drawing.Size(129, 20);
-            this.ZXJ.TabIndex = 5;
-            this.ZXJ.Text = "造型机通讯异常！";
-            // 
-            // ZXX
-            // 
-            this.ZXX.AutoSize = true;
-            this.ZXX.ForeColor = System.Drawing.Color.Red;
-            this.ZXX.Location = new System.Drawing.Point(635, 282);
-            this.ZXX.Name = "ZXX";
-            this.ZXX.Size = new System.Drawing.Size(129, 20);
-            this.ZXX.TabIndex = 5;
-            this.ZXX.Text = "造型线通讯异常！";
-            // 
-            // TS
-            // 
-            this.TS.AutoSize = true;
-            this.TS.ForeColor = System.Drawing.Color.Red;
-            this.TS.Location = new System.Drawing.Point(635, 307);
-            this.TS.Name = "TS";
-            this.TS.Size = new System.Drawing.Size(144, 20);
-            this.TS.TabIndex = 5;
-            this.TS.Text = "铁水转运通讯异常！";
-            // 
-            // PW
-            // 
-            this.PW.AutoSize = true;
-            this.PW.ForeColor = System.Drawing.Color.Red;
-            this.PW.Location = new System.Drawing.Point(635, 332);
-            this.PW.Name = "PW";
-            this.PW.Size = new System.Drawing.Size(114, 20);
-            this.PW.TabIndex = 5;
-            this.PW.Text = "抛丸通讯异常！";
-            // 
-            // DM1
-            // 
-            this.DM1.AutoSize = true;
-            this.DM1.ForeColor = System.Drawing.Color.Red;
-            this.DM1.Location = new System.Drawing.Point(635, 357);
-            this.DM1.Name = "DM1";
-            this.DM1.Size = new System.Drawing.Size(123, 20);
-            this.DM1.TabIndex = 5;
-            this.DM1.Text = "打磨1通讯异常！";
-            // 
-            // PQ
-            // 
-            this.PQ.AutoSize = true;
-            this.PQ.ForeColor = System.Drawing.Color.Red;
-            this.PQ.Location = new System.Drawing.Point(635, 382);
-            this.PQ.Name = "PQ";
-            this.PQ.Size = new System.Drawing.Size(114, 20);
-            this.PQ.TabIndex = 5;
-            this.PQ.Text = "喷漆通讯异常！";
-            // 
-            // BZ
-            // 
-            this.BZ.AutoSize = true;
-            this.BZ.ForeColor = System.Drawing.Color.Red;
-            this.BZ.Location = new System.Drawing.Point(635, 407);
-            this.BZ.Name = "BZ";
-            this.BZ.Size = new System.Drawing.Size(114, 20);
-            this.BZ.TabIndex = 5;
-            this.BZ.Text = "包装通讯异常！";
-            // 
-            // DM2
-            // 
-            this.DM2.AutoSize = true;
-            this.DM2.ForeColor = System.Drawing.Color.Red;
-            this.DM2.Location = new System.Drawing.Point(797, 357);
-            this.DM2.Name = "DM2";
-            this.DM2.Size = new System.Drawing.Size(123, 20);
-            this.DM2.TabIndex = 5;
-            this.DM2.Text = "打磨2通讯异常！";
+            this.button3.Location = new System.Drawing.Point(888, 254);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 6;
+            this.button3.Text = "button3";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click_1);
             // 
             // FormSiemens
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
             this.ClientSize = new System.Drawing.Size(1346, 561);
@@ -912,5 +924,6 @@
         private System.Windows.Forms.Label TS;
         private System.Windows.Forms.Label ZXX;
         private System.Windows.Forms.Label ZXJ;
+        private System.Windows.Forms.Button button3;
     }
 }

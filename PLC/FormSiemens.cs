@@ -27,21 +27,10 @@ namespace HslCommunicationDemo
         {
             InitializeComponent();
             siemensTcpNet = new SiemensS7Net(siemensPLCS);
-            timer = new System.Timers.Timer();
-            timer.Enabled = true;
-            timer.Interval = 10000;
-            timer.Start();
-            timer.Elapsed += timer_Elapsed;
+            CheckForIllegalCrossThreadCalls = false;
 
-            //铁水转运线程
-            thread1 = new Thread(ThreadReadServer1);
-            thread1.IsBackground = true;
-            thread1.Start();
 
-            //异常检测线程
-            thread9 = new Thread(ThreadReadServer9);
-            thread9.IsBackground = true;
-            thread9.Start();
+
 
         }
 
@@ -114,6 +103,22 @@ namespace HslCommunicationDemo
                     button2.Enabled = true;
                     button1.Enabled = false;
                     panel2.Enabled = true;
+
+                    //timer = new System.Timers.Timer();
+                    //timer.Enabled = true;
+                    //timer.Interval = 10000;
+                    //timer.Start();
+                    //timer.Elapsed += timer_Elapsed;
+
+                    ////铁水转运线程
+                    //thread1 = new Thread(ThreadReadServer1);
+                    //thread1.IsBackground = true;
+                    //thread1.Start();
+
+                    //异常检测线程
+                    thread9 = new Thread(ThreadReadServer9);
+                    thread9.IsBackground = true;
+                    thread9.Start();
                 }
                 else
                 {
@@ -134,6 +139,7 @@ namespace HslCommunicationDemo
             button2.Enabled = false;
             button1.Enabled = true;
             panel2.Enabled = false;
+            timer.Stop();
         }
 
         #endregion
@@ -449,7 +455,6 @@ namespace HslCommunicationDemo
         //时延函数，启动线程
         void timer_Elapsed(object sender,System.Timers.ElapsedEventArgs e)
         {
-
             thread2 = new Thread(ThreadReadServer2);
             thread2.IsBackground = true;
             thread2.Start();
@@ -468,47 +473,62 @@ namespace HslCommunicationDemo
             thread7 = new Thread(ThreadReadServer7);
             thread7.IsBackground = true;
             thread7.Start();
-            if(DateTime.Today.Day != day)    //每天执行一次
+            if (DateTime.Today.Day != day)    //每天执行一次
             {
-                if(DateTime.Now.Hour == 23)     //23点执行
+                if (DateTime.Now.Hour == 23)     //23点执行
                 {
                     thread8 = new Thread(ThreadReadServer8);
                     thread8.IsBackground = true;
                     thread8.Start();
                 }
             }
-   
+
         }
    
         //铁水转运线程
         private void ThreadReadServer1()
         {
-            int result = 0;
             IronMeltTrans ironMeltTrans = new IronMeltTrans();
-
-            try
+            int result;
+            while (true) //持续执行
             {
-                //持续读取                                                                   
-                int groupinfo = siemensTcpNet.ReadInt16("DB1.540").Content;   //班次
-                if (groupinfo == 2) { ironMeltTrans.GroupSID = 6; }
-                if (groupinfo == 3) { ironMeltTrans.GroupSID = 5; }
-                ironMeltTrans.ProductionScheduleSID = ProductionScheduleDAL.GetProductionScheduleSID(); //订单
-                ironMeltTrans.EmployeeSID = siemensTcpNet.ReadInt16("DB1.540").Content;   //员工（测试）
-                ironMeltTrans.EquipmentSID = siemensTcpNet.ReadInt16("DB1.4").Content;//炉号
-                ironMeltTrans.ElectricFurnaceCount = siemensTcpNet.ReadInt16("DB1.6").Content;//炉次
-                ironMeltTrans.IronMeltTransNum = siemensTcpNet.ReadInt16("DB1.8").Content;//包次
-                ironMeltTrans.IronMeltTransWeight = siemensTcpNet.ReadInt16("DB1.0").Content;//铁水重量 
-                ironMeltTrans.IronMeltTransTime = DateTime.Now;//铁水转运时间                    
-                if (siemensTcpNet.ReadBool("DB1.552").Content == true) ironMeltTrans.BackWeight = siemensTcpNet.ReadInt16("DB1.550").Content;    //行车吊装
-                
+                result = 0;
+                                                                                                
                 //根据标志上升沿写入数据库
-                if(Convert.ToInt16(siemensTcpNet.ReadBool("DB1.826.4").Content) - Convert.ToInt16(ironWriteSQL) == 1)
-                { 
-                    result = IronMeltTransDAL.AddIronMeltTransInfo(ironMeltTrans);
+                if (Convert.ToInt16(siemensTcpNet.ReadBool("DB1.826.4").Content) - Convert.ToInt16(ironWriteSQL) == 1)
+                {
+                    int groupinfo = siemensTcpNet.ReadInt16("DB1.540").Content;   //班次
+                    if (groupinfo == 2) { ironMeltTrans.GroupSID = 6; }
+                    if (groupinfo == 3) { ironMeltTrans.GroupSID = 5; }
+                    try
+                    {
+                        ironMeltTrans.ProductionScheduleSID = ProductionScheduleDAL.GetProductionScheduleSID(); //订单
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
 
+                    ironMeltTrans.EmployeeSID = siemensTcpNet.ReadInt16("DB1.540").Content;   //员工（测试）
+                    ironMeltTrans.EquipmentSID = siemensTcpNet.ReadInt16("DB1.4").Content;//炉号
+                    ironMeltTrans.ElectricFurnaceCount = siemensTcpNet.ReadInt16("DB1.6").Content;//炉次
+                    ironMeltTrans.IronMeltTransNum = siemensTcpNet.ReadInt16("DB1.8").Content;//包次
+                    ironMeltTrans.IronMeltTransWeight = siemensTcpNet.ReadInt16("DB1.0").Content;//铁水重量 
+                    ironMeltTrans.IronMeltTransTime = DateTime.Now;//铁水转运时间                    
+                    if (siemensTcpNet.ReadBool("DB1.552").Content == true) ironMeltTrans.BackWeight = siemensTcpNet.ReadInt16("DB1.550").Content;    //行车吊装
+
+                    try
+                    {
+                        result = IronMeltTransDAL.AddIronMeltTransInfo(ironMeltTrans);
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show("铁水转运出现问题" + ex.Message);
+                        return;
+                    }
+                        
                     if (result == 1)
                     {
-                       
                         listBox2.Items.Add("铁水转运写入数据库成功  " + DateTime.Now);
                         int result2 = 0;
                         IronMeltSuppMaterial ironMeltSuppMaterial = new IronMeltSuppMaterial();
@@ -520,19 +540,19 @@ namespace HslCommunicationDemo
                         ironMeltSuppMaterial.IronMeltSuppMaterialTime = DateTime.Now;
                         try
                         {
-                            result2 = IronMeltSuppMaterialDAL.AddIronMeltSuppMaterial(ironMeltSuppMaterial);
-                            if (result2 == 1)
-                            {
-                                listBox2.Items.Add("铁水转运加料写入数据库成功  " + DateTime.Now);
-                            }
-                            else
-                            {
-                                listBox2.Items.Add("铁水转运加料写入数据库失败  " + DateTime.Now);
-                            }
+                            result2 = IronMeltSuppMaterialDAL.AddIronMeltSuppMaterial(ironMeltSuppMaterial);  
                         }
                         catch (Exception ex)
                         {
                             MessageBox.Show("铁水转运加料出现问题：" + ex.Message);
+                        }
+                        if (result2 == 1)
+                        {
+                            listBox2.Items.Add("铁水转运加料写入数据库成功  " + DateTime.Now);
+                        }
+                        else
+                        {
+                            listBox2.Items.Add("铁水转运加料写入数据库失败  " + DateTime.Now);
                         }
 
                     }
@@ -540,18 +560,14 @@ namespace HslCommunicationDemo
                     {
                         listBox2.Items.Add("铁水转运写入数据库失败  " + DateTime.Now);
                     }
+
+
                 }
 
-                ironWriteSQL = siemensTcpNet.ReadBool("DB1.826.4").Content;//更新标志
-
+                ironWriteSQL = siemensTcpNet.ReadBool("DB1.826.4").Content; //更新标志
+          
 
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("铁水转运出现问题：" + ex.Message);
-            }
-  
-
         }
 
         //1号打磨线程
@@ -736,6 +752,13 @@ namespace HslCommunicationDemo
             this.thread4.Abort();
         }
 
+        private void button3_Click_1(object sender, EventArgs e)//测试
+        {
+            ThreadReadServer8();
+    
+
+        }
+
         //喷漆线程
         private void ThreadReadServer5()
         {        
@@ -849,18 +872,21 @@ namespace HslCommunicationDemo
                     result = 0;
                     result = ElecPowerDAL.AddElecPower(elecPower);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show("电表出现问题：" + ex.Message);
-                }           
-                if (result == 1)
-                {
-                    listBox2.Items.Add("电能写入数据库成功  " + DateTime.Now);
                 }
-                else
-                {
-                    listBox2.Items.Add("电能写入数据库失败  " + DateTime.Now);
+                finally {
+                    if (result == 1)
+                    {
+                        listBox2.Items.Add("电能写入数据库成功  " + DateTime.Now);
+                    }
+                    else
+                    {
+                        listBox2.Items.Add("电能写入数据库失败  " + DateTime.Now);
+                    }
                 }
+    
             }
 
             //26-30号从站 DB14.X
@@ -870,36 +896,42 @@ namespace HslCommunicationDemo
                 addr = 8 + 124 * (i - 1) + DateTime.Now.Day * 4;  //从站地址
                 address = "DB14." + addr;
                 elecPower.ElecPowerData = siemensTcpNet.ReadInt32(address).Content; //获取电能数据
-                elecPower.ElecMeter = i;   //获取电表号
+                elecPower.ElecMeter = i+25;   //获取电表号
                 elecPower.ElecDate = DateTime.Now;  //获取日期
                 try
                 {
-                    result = 0;
+                    result = 0;  
                     result = ElecPowerDAL.AddElecPower(elecPower);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("电表出现问题：" + ex.Message);
                 }
-                if (result == 1)
+                finally
                 {
-                    listBox2.Items.Add("电能写入数据库成功  " + DateTime.Now);
+                    if (result == 1)
+                    {
+                        listBox2.Items.Add("电能写入数据库成功  " + DateTime.Now);
+                    }
+                    else
+                    {
+                        listBox2.Items.Add("电能写入数据库失败  " + DateTime.Now);
+                    }
                 }
-                else
-                {
-                    listBox2.Items.Add("电能写入数据库失败  " + DateTime.Now);
-                }
+         
             }
 
             day = DateTime.Today.Day;
-            this.thread8.Abort();
+            //this.thread8.Abort();
         }
 
         //通讯异常检测线程
         private void ThreadReadServer9()
         {
-            //定义错误列表，传入地址时要注意顺序           
-            var errors = ReadBoolList(new List<string>() {
+            while (true)
+            {
+                //定义错误列表，传入地址时要注意顺序           
+                var errors = ReadBoolList(new List<string>() {
                 #region 读取地址
                 //铁水
                 "M10.1",
@@ -932,14 +964,14 @@ namespace HslCommunicationDemo
                 "M24.3"
                 #endregion
             });
-            List<int> nums = new List<int>(); //报错的号码列表
+                var nums = new List<int>(); //报错的号码列表
                 //遍历errors，看哪几个报错
                 errors.ForEach(error =>
-                {                
+                {
                     if (error == true)
                     {
                         int index = errors.IndexOf(error);
-                        if (index <= 7)  nums.Add(0);
+                        if (index <= 7) nums.Add(0);
                         if (index == 8 || index == 9) nums.Add(1);
                         if (index == 10 || index == 11) nums.Add(2);
                         if (index == 12 || index == 13) nums.Add(3);
@@ -950,16 +982,16 @@ namespace HslCommunicationDemo
                     }
                 });
 
-            //定义标签列表，顺序很重要，要与地址顺序对应
-            var labels = new List<Label>() { TS, ZXJ, ZXX, PW, DM1, DM2, PQ, BZ };
+                //定义标签列表，顺序很重要，要与地址顺序对应
+                var labels = new List<Label>() { TS, ZXJ, ZXX, PW, DM1, DM2, PQ, BZ };
 
-            labels.ForEach(label => 
-            {
-                if (nums.Exists(num=> num == labels.IndexOf(label)))    //如果label索引在报错列表中
-                typeof(Label).GetProperty("Visible").SetValue(label, true, null);   //报错
+                labels.ForEach(label =>
+                {
+                    if (nums.Exists(num => num == labels.IndexOf(label)))    //如果label索引在报错列表中
+                    typeof(Label).GetProperty("Visible").SetValue(label, true, null);   //报错
                 else typeof(Label).GetProperty("Visible").SetValue(label, false, null); //不在则取消错误
             });
-
+            }
         }
 
         //传入地址列表读取布尔值列表
